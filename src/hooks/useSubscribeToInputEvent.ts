@@ -1,8 +1,8 @@
-import queryString from "query-string";
 import React from "react";
 import { simpleEventEmitter } from "../util/simpleEventEmitter";
 import { setupDocumentInputEvents } from "./inputEvents/setupDocumentInputEvents";
 import { setupWebSocketInputEvents } from "./inputEvents/setupWebSocketInputEvents";
+import { useConfiguration } from "./useConfiguration";
 
 type BaseEvent<EventType extends string> = {
   event_type: EventType;
@@ -32,20 +32,20 @@ type InputEventEmitter = typeof inputEventEmitter;
 export type EmitInputEventFn = InputEventEmitter["emit"];
 export type SubscribeToInputEventFn = InputEventEmitter["on"];
 
-const queryParams = queryString.parse(location.search, { parseBooleans: true });
-
 export const useSubscribeToInputEvent = () => {
+  const { configuration } = useConfiguration();
+
   React.useEffect(() => {
     let inputEventSource: (emitter: EmitInputEventFn) => () => void;
 
-    if (queryParams.event_source === "document") {
+    if (configuration.event_source === "document") {
       inputEventSource = setupDocumentInputEvents;
     } else {
       inputEventSource = setupWebSocketInputEvents;
     }
 
     return inputEventSource(inputEventEmitter.emit);
-  });
+  }, [configuration]);
 
   return inputEventEmitter.on;
 };
