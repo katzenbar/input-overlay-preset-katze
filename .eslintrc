@@ -38,6 +38,13 @@
       {
         "endOfLine": "auto"
       }
-    ]
+    ],
+
+    "no-console": "warn"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 }
