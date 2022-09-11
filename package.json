@@ -8,6 +8,7 @@
     "build": "tsc && vite build",
     "format:all": "prettier --write .",
     "format:check": "prettier --check .",
+    "lint": "eslint --ext .js,.ts,.jsx,.tsx --max-warnings 0 ./src",
     "preview": "vite preview",
     "test": "vitest"
   },
