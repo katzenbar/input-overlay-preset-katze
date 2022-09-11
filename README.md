@@ -4,7 +4,16 @@ A browser-based preset for the [input-overlay (v5.0.0+)](https://github.com/univ
 
 # Using the preset
 
-TODO
+## Configuration options
+
+You can configure this page by passing in different options through the url's [query string](https://en.wikipedia.org/wiki/Query_string). The supported options and their values are listed below.
+
+### event_source
+
+- `web_socket` - default
+- `document`
+
+Allows switching to use events from the browser to preview settings without having to open the page in OBS.
 
 # Development
 
