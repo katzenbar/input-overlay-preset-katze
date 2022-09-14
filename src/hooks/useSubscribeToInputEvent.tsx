@@ -1,4 +1,4 @@
-import React from "react";
+import React, { PropsWithChildren } from "react";
 import { simpleEventEmitter } from "../util/simpleEventEmitter";
 import { InputEvents } from "./inputEvents/inputEventSchema";
 import { setupDocumentInputEvents } from "./inputEvents/setupDocumentInputEvents";
@@ -13,7 +13,10 @@ type InputEventEmitter = typeof inputEventEmitter;
 export type EmitInputEventFn = InputEventEmitter["emit"];
 export type SubscribeToInputEventFn = InputEventEmitter["on"];
 
-export const useSubscribeToInputEvent = () => {
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const InputEventEmitterContext = React.createContext<SubscribeToInputEventFn>(() => () => {});
+
+export const InputEventEmitterProvider: React.FC<PropsWithChildren> = (props) => {
   const { configuration } = useConfiguration();
 
   React.useEffect(() => {
@@ -28,5 +31,9 @@ export const useSubscribeToInputEvent = () => {
     return inputEventSource(inputEventEmitter.emit);
   }, [configuration]);
 
-  return inputEventEmitter.on;
+  return <InputEventEmitterContext.Provider {...props} value={inputEventEmitter.on} />;
+};
+
+export const useSubscribeToInputEvent = () => {
+  return React.useContext(InputEventEmitterContext);
 };
