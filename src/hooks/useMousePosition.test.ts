@@ -14,13 +14,14 @@ describe.concurrent("useMousePosition", () => {
     vi.clearAllMocks();
   });
 
-  it("updates the mouse position as events are sent", () => {
+  it("updates the mouse position as mouse_moved events are sent", () => {
     const subscribeMock = vi.fn();
     useSubscribeToInputEventMock.mockImplementation(() => subscribeMock);
 
     const { result } = renderHook(() => useMousePosition());
 
-    expect(subscribeMock).toHaveBeenCalledOnce();
+    expect(subscribeMock).toHaveBeenCalledTimes(2);
+
     const callback = subscribeMock.mock.lastCall?.at(1);
     callback("mouse_moved", { x: 10, y: 50 });
 
@@ -29,6 +30,28 @@ describe.concurrent("useMousePosition", () => {
     });
 
     callback("mouse_moved", { x: 100, y: 20 });
+
+    waitFor(() => {
+      expect(result.current).toEqual({ x: 100, y: 20 });
+    });
+  });
+
+  it("updates the mouse position as mouse_dragged events are sent", () => {
+    const subscribeMock = vi.fn();
+    useSubscribeToInputEventMock.mockImplementation(() => subscribeMock);
+
+    const { result } = renderHook(() => useMousePosition());
+
+    expect(subscribeMock).toHaveBeenCalledTimes(2);
+
+    const callback = subscribeMock.mock.lastCall?.at(1);
+    callback("mouse_dragged", { x: 10, y: 50 });
+
+    waitFor(() => {
+      expect(result.current).toEqual({ x: 10, y: 50 });
+    });
+
+    callback("mouse_dragged", { x: 100, y: 20 });
 
     waitFor(() => {
       expect(result.current).toEqual({ x: 100, y: 20 });

@@ -15,5 +15,13 @@ export const useMousePosition = (): MousePosition => {
     [subscribeToInputEvent],
   );
 
+  React.useEffect(
+    () =>
+      subscribeToInputEvent("mouse_dragged", (data) => {
+        setMousePosition({ x: data.x, y: data.y });
+      }),
+    [subscribeToInputEvent],
+  );
+
   return mousePosition;
 };
