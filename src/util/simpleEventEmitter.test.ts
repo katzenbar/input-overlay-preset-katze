@@ -18,7 +18,7 @@ describe.concurrent("simpleEventEmitter", () => {
   it("does not call a callback for another event name", () => {
     const callbackMock = vi.fn();
 
-    const emitter = simpleEventEmitter<{ test: null; aDifferentEvent: null }>();
+    const emitter = simpleEventEmitter<{ test: null; aDifferentEvent: { a: string } }>();
 
     emitter.on("aDifferentEvent", callbackMock);
     emitter.emit("test", null);

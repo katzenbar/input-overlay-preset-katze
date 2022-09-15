@@ -1,16 +1,18 @@
 export type SimpleEventEmitterUnsubscribeFn = () => void;
 
-export type SimpleEventEmitter<EventMap extends { [eventName: string]: unknown }> = {
-  on: (
-    eventName: keyof EventMap,
-    callback: (data: EventMap[typeof eventName]) => void,
+export type SimpleEventEmitter<EventMap> = {
+  on: <EventName extends keyof EventMap>(
+    eventName: EventName,
+    callback: (data: EventMap[EventName]) => void,
   ) => SimpleEventEmitterUnsubscribeFn;
 
-  emit: (eventName: keyof EventMap, data: EventMap[typeof eventName]) => void;
+  emit: <EventName extends keyof EventMap>(eventName: EventName, data: EventMap[EventName]) => void;
 };
 
-export function simpleEventEmitter<EventMap extends { [eventName: string]: unknown }>(): SimpleEventEmitter<EventMap> {
-  type SubcribersMap = { [eventName in keyof EventMap]?: Array<(data: EventMap[eventName]) => void> };
+export function simpleEventEmitter<EventMap>(): SimpleEventEmitter<EventMap> {
+  type SubcribersMap = {
+    [eventName in keyof EventMap]?: Array<(data: EventMap[eventName]) => void>;
+  };
 
   const subscribers: SubcribersMap = {};
 
