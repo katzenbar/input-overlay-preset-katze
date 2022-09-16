@@ -1,5 +1,4 @@
 import React from "react";
-import { scanCodeToKeyCode } from "../hooks/inputEvents/keyCodeMappings";
 import { useSubscribeToInputEvent } from "../hooks/useSubscribeToInputEvent";
 
 export const KeyboardInput: React.FC = () => {
@@ -8,8 +7,8 @@ export const KeyboardInput: React.FC = () => {
 
   React.useEffect(
     () =>
-      subscribeToInputEvent("key_pressed", (data) => {
-        setKey(scanCodeToKeyCode(data.keycode));
+      subscribeToInputEvent("key_typed", (data) => {
+        setKey(data.char);
       }),
     [subscribeToInputEvent],
   );

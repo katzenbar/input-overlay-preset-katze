@@ -65,23 +65,36 @@ export const setupDomInputEvents = (emitInputEvent: EmitInputEventFn): (() => vo
     });
   };
 
+  const handleKeyTypedEvent = (key: "key_typed") => (ev: KeyboardEvent) => {
+    emitInputEvent(key, {
+      event_type: key,
+      event_source: "web",
+      time: Math.trunc(ev.timeStamp * 1000),
+      char: ev.key,
+      mask: maskFromKeyboardEvent(ev),
+      keycode: 0,
+      rawcode: 0,
+    });
+  };
+
   const blockContextMenu = (ev: MouseEvent) => {
     ev.preventDefault();
     ev.stopPropagation();
   };
 
-  document.addEventListener("contextmenu", blockContextMenu);
-
   const onMouseDown = handleMouseEvent("mouse_pressed");
   const onMouseUp = handleMouseEvent("mouse_released");
   const onMouseMove = handleMouseEvent("mouse_moved");
 
+  const onKeyPress = handleKeyTypedEvent("key_typed");
   const onKeyDown = handleKeyEvent("key_pressed");
   const onKeyUp = handleKeyEvent("key_released");
 
+  document.addEventListener("contextmenu", blockContextMenu);
   document.addEventListener("mouseup", onMouseUp);
   document.addEventListener("mousedown", onMouseDown);
   document.addEventListener("mousemove", onMouseMove);
+  document.addEventListener("keypress", onKeyPress);
   document.addEventListener("keydown", onKeyDown);
   document.addEventListener("keyup", onKeyUp);
 
@@ -90,5 +103,8 @@ export const setupDomInputEvents = (emitInputEvent: EmitInputEventFn): (() => vo
     document.removeEventListener("mouseup", onMouseUp);
     document.removeEventListener("mousedown", onMouseDown);
     document.removeEventListener("mousemove", onMouseMove);
+    document.removeEventListener("keypress", onKeyPress);
+    document.removeEventListener("keydown", onKeyDown);
+    document.removeEventListener("keyup", onKeyUp);
   };
 };
