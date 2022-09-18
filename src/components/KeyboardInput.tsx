@@ -1,17 +1,24 @@
 import React from "react";
+import { useAppendAndHold } from "../hooks/useAppendAndHold";
 import { useSubscribeToInputEvent } from "../hooks/useSubscribeToInputEvent";
 
 export const KeyboardInput: React.FC = () => {
-  const [key, setKey] = React.useState("");
+  const { value, addValue, setValue } = useAppendAndHold<React.ReactNode>();
   const subscribeToInputEvent = useSubscribeToInputEvent();
 
   React.useEffect(
     () =>
       subscribeToInputEvent("key_typed", (data) => {
-        setKey(data.char);
+        if (data.char === "Enter") {
+          addValue("<ENTER>");
+        } else if (data.mask > 0) {
+          setValue(data.char);
+        } else {
+          addValue(data.char);
+        }
       }),
-    [subscribeToInputEvent],
+    [subscribeToInputEvent, addValue, setValue],
   );
 
-  return <div>KEY: {key}</div>;
+  return <div>You typed: {value}</div>;
 };
