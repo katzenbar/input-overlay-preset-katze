@@ -1,5 +1,5 @@
 import { EmitInputEventFn } from "../useSubscribeToInputEvent";
-import { mapDomEventToScanCode } from "./keyCodeMappings";
+import { mapDomEventToScanCode } from "../../util/keyCodeMappings";
 
 const convertMouseButtonToUiohook = (domButton: number): number => {
   switch (domButton) {
