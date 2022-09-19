@@ -1,9 +1,11 @@
 import React from "react";
 import { useAppendAndHold } from "../hooks/useAppendAndHold";
+import { usePressedKeys } from "../hooks/usePressedKeys";
 import { useSubscribeToInputEvent } from "../hooks/useSubscribeToInputEvent";
 
 export const KeyboardInput: React.FC = () => {
   const { value, addValue, setValue } = useAppendAndHold<React.ReactNode>();
+  const pressedKeys = usePressedKeys();
   const subscribeToInputEvent = useSubscribeToInputEvent();
 
   React.useEffect(
@@ -20,5 +22,13 @@ export const KeyboardInput: React.FC = () => {
     [subscribeToInputEvent, addValue, setValue],
   );
 
-  return <div>You typed: {value}</div>;
+  return (
+    <>
+      <div>You typed: {value}</div>
+      <div>
+        You are pressing:
+        <>{Array.from(pressedKeys.pressedKeys).join(" + ")}</>
+      </div>
+    </>
+  );
 };
