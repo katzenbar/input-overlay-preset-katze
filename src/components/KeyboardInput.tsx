@@ -1,34 +1,16 @@
 import React from "react";
-import { useAppendAndHold } from "../hooks/useAppendAndHold";
 import { usePressedKeys } from "../hooks/usePressedKeys";
-import { useSubscribeToInputEvent } from "../hooks/useSubscribeToInputEvent";
 
 export const KeyboardInput: React.FC = () => {
-  const { value, addValue, setValue } = useAppendAndHold<React.ReactNode>();
-  const pressedKeys = usePressedKeys();
-  const subscribeToInputEvent = useSubscribeToInputEvent();
-
-  React.useEffect(
-    () =>
-      subscribeToInputEvent("key_typed", (data) => {
-        if (data.char === "Enter") {
-          addValue("<ENTER>");
-        } else if (data.mask > 0) {
-          setValue(data.char);
-        } else {
-          addValue(data.char);
-        }
-      }),
-    [subscribeToInputEvent, addValue, setValue],
-  );
+  const { pressedKeys } = usePressedKeys();
 
   return (
-    <>
-      <div>You typed: {value}</div>
-      <div>
-        You are pressing:
-        <>{Array.from(pressedKeys.pressedKeys).join(" + ")}</>
-      </div>
-    </>
+    <div className="fixed top-0 bottom-16 left-0 right-0 flex justify-center items-end">
+      {pressedKeys.size > 0 && (
+        <span className="py-3 px-6 rounded-3xl bg-slate-800 text-white">
+          <span className="text-3xl font-semibold">{Array.from(pressedKeys).join(" + ")}</span>
+        </span>
+      )}
+    </div>
   );
 };
