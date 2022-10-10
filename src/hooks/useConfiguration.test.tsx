@@ -7,7 +7,7 @@ describe.concurrent("useConfiguration", () => {
   it("returns the default configuration when no options are set", () => {
     const { result } = renderHook(() => useConfiguration(), { wrapper: ConfigurationProvider });
     expect(result.current).toEqual({
-      configuration: { configuration_ui: true, event_source: "browser" },
+      configuration: { configuration_ui: true, event_source: "browser", mouse_click_highlight_color: "#EE0000" },
       setConfiguration: expect.any(Function),
     });
   });

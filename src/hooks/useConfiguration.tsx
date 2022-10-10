@@ -9,6 +9,7 @@ const defaultHistory = createBrowserHistory();
 const configSchema = z.object({
   configuration_ui: z.boolean().default(true),
   event_source: z.enum(["web_socket", "browser"]).default("browser"),
+  mouse_click_highlight_color: z.string().default("#EE0000"),
 });
 
 export type Configuration = z.infer<typeof configSchema>;
