@@ -22,7 +22,7 @@ export const InputEventEmitterProvider: React.FC<PropsWithChildren> = (props) =>
   React.useEffect(() => {
     let inputEventSource: (emitter: EmitInputEventFn) => () => void;
 
-    if (configuration.event_source === "document") {
+    if (configuration.event_source === "browser") {
       inputEventSource = setupDocumentInputEvents;
     } else {
       inputEventSource = setupWebSocketInputEvents;

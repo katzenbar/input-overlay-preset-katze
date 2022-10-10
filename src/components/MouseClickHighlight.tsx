@@ -2,6 +2,7 @@ import React from "react";
 import { motion, AnimatePresence, MotionConfig } from "framer-motion";
 import { useMouseDownState } from "../hooks/useMouseDownState";
 import { useMousePosition } from "../hooks/useMousePosition";
+import { useConfiguration } from "../hooks/useConfiguration";
 
 const mouseHighlightRadius = 15;
 const indicatorRatio = 0.4;
@@ -9,11 +10,13 @@ const indicatorRatio = 0.4;
 const transition = { type: "spring", duration: 0.15, bounce: 0.3 };
 
 export const MouseClickHighlight: React.FC = () => {
+  const { configuration } = useConfiguration();
   const mouseDownState = useMouseDownState();
   const mousePosition = useMousePosition();
 
   const anyMouseButtonDown = mouseDownState[1] || mouseDownState[2] || mouseDownState[3];
 
+  const highlightColor = configuration.mouse_click_highlight_color;
   const indicatorRadius = indicatorRatio * mouseHighlightRadius;
 
   return (
@@ -30,8 +33,9 @@ export const MouseClickHighlight: React.FC = () => {
           {mouseDownState[1] && (
             <motion.div
               key="lmb-highlight"
-              className="rounded-full	bg-red-500"
+              className="rounded-full"
               style={{
+                backgroundColor: highlightColor,
                 position: "absolute",
                 height: 2 * indicatorRadius,
                 width: 2 * indicatorRadius,
@@ -48,8 +52,10 @@ export const MouseClickHighlight: React.FC = () => {
             <>
               <motion.div
                 key="rmb-highlight-1"
-                className="rounded-full	bg-red-500"
+                className="rounded-full"
                 style={{
+                  backgroundColor: highlightColor,
+
                   position: "absolute",
                   height: 2 * indicatorRadius,
                   width: 2 * indicatorRadius,
@@ -62,8 +68,9 @@ export const MouseClickHighlight: React.FC = () => {
               />
               <motion.div
                 key="rmb-highlight-2"
-                className="rounded-full	bg-red-500"
+                className="rounded-full"
                 style={{
+                  backgroundColor: highlightColor,
                   position: "absolute",
                   height: 2 * indicatorRadius,
                   width: 2 * indicatorRadius,
@@ -80,8 +87,9 @@ export const MouseClickHighlight: React.FC = () => {
           {mouseDownState[3] && (
             <motion.div
               key="mmb-highlight"
-              className="rounded-full	bg-red-500"
+              className="rounded-full"
               style={{
+                backgroundColor: highlightColor,
                 position: "absolute",
                 height: 3 * indicatorRadius,
                 width: 2 * indicatorRadius,
@@ -97,8 +105,9 @@ export const MouseClickHighlight: React.FC = () => {
           {anyMouseButtonDown && (
             <motion.div
               key="mouse-highlight"
-              className="rounded-full	border-4 border-red-500"
+              className="rounded-full	border-4"
               style={{
+                borderColor: highlightColor,
                 position: "absolute",
                 top: -mouseHighlightRadius,
                 left: -mouseHighlightRadius,

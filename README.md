@@ -8,10 +8,17 @@ A browser-based preset for the [input-overlay (v5.0.0+)](https://github.com/univ
 
 You can configure this page by passing in different options through the url's [query string](https://en.wikipedia.org/wiki/Query_string). The supported options and their values are listed below.
 
+### configuration_ui
+
+- `true` - default
+- `false`
+
+Displays the configuration UI, allowing an easy way to set configurable settings in the browser before copying the link into OBS.
+
 ### event_source
 
-- `web_socket` - default
-- `document`
+- `browser` - default
+- `web_socket`
 
 Allows switching to use events from the browser to preview settings without having to open the page in OBS.
 
