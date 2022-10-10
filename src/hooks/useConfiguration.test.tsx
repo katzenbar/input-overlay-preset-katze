@@ -7,30 +7,44 @@ describe.concurrent("useConfiguration", () => {
   it("returns the default configuration when no options are set", () => {
     const { result } = renderHook(() => useConfiguration(), { wrapper: ConfigurationProvider });
     expect(result.current).toEqual({
-      configuration: { event_source: "web_socket" },
+      configuration: { configuration_ui: true, event_source: "browser" },
       setConfiguration: expect.any(Function),
     });
   });
 
   describe("event_source", () => {
-    it("defaults to web_socket", () => {
+    it("defaults to document", () => {
       const { result } = renderHook(() => useConfiguration(), { wrapper: ConfigurationProvider });
       expect(result.current).toEqual({
-        configuration: { event_source: "web_socket" },
+        configuration: expect.objectContaining({ event_source: "browser" }),
         setConfiguration: expect.any(Function),
       });
     });
 
     it("allows document", () => {
       const history = createMemoryHistory();
-      history.replace("/?event_source=document");
+      history.replace("/?event_source=browser");
 
       const { result } = renderHook(() => useConfiguration(), {
         wrapper: (props) => <ConfigurationProvider {...props} customHistory={history} />,
       });
 
       expect(result.current).toEqual({
-        configuration: { event_source: "document" },
+        configuration: expect.objectContaining({ event_source: "browser" }),
+        setConfiguration: expect.any(Function),
+      });
+    });
+
+    it("allows web_socket", () => {
+      const history = createMemoryHistory();
+      history.replace("/?event_source=web_socket");
+
+      const { result } = renderHook(() => useConfiguration(), {
+        wrapper: (props) => <ConfigurationProvider {...props} customHistory={history} />,
+      });
+
+      expect(result.current).toEqual({
+        configuration: expect.objectContaining({ event_source: "web_socket" }),
         setConfiguration: expect.any(Function),
       });
     });
@@ -44,13 +58,13 @@ describe.concurrent("useConfiguration", () => {
       });
 
       expect(result.current).toEqual({
-        configuration: { event_source: "web_socket" },
+        configuration: expect.objectContaining({ event_source: "browser" }),
         errors: "boop",
         setConfiguration: expect.any(Function),
       });
     });
 
-    it("sets the value of event source to document", () => {
+    it("sets the value of event source to web_socket", () => {
       const history = createMemoryHistory();
 
       const { result } = renderHook(() => useConfiguration(), {
@@ -58,11 +72,11 @@ describe.concurrent("useConfiguration", () => {
       });
 
       act(() => {
-        result.current.setConfiguration({ event_source: "document" });
+        result.current.setConfiguration({ event_source: "web_socket" });
       });
 
       expect(result.current).toEqual({
-        configuration: { event_source: "document" },
+        configuration: expect.objectContaining({ event_source: "web_socket" }),
         setConfiguration: expect.any(Function),
       });
     });

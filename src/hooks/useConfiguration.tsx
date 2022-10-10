@@ -1,4 +1,5 @@
 import { createBrowserHistory, History } from "history";
+import { isEqual } from "lodash";
 import queryString from "query-string";
 import React from "react";
 import { z } from "zod";
@@ -6,7 +7,8 @@ import { z } from "zod";
 const defaultHistory = createBrowserHistory();
 
 const configSchema = z.object({
-  event_source: z.enum(["web_socket", "document"]).default("web_socket"),
+  configuration_ui: z.boolean().default(true),
+  event_source: z.enum(["web_socket", "browser"]).default("browser"),
 });
 
 export type Configuration = z.infer<typeof configSchema>;
@@ -17,7 +19,7 @@ export type ParsedConfiguration = {
 };
 
 export type ConfigurationContextType = ParsedConfiguration & {
-  setConfiguration: (newConfiguration: Configuration) => void;
+  setConfiguration: (newConfiguration: Partial<Configuration>) => void;
 };
 
 const parseConfig = (urlQueryString: string) => {
@@ -42,24 +44,38 @@ export type ConfigurationProviderProps = React.PropsWithChildren<{ customHistory
 
 export const ConfigurationProvider: React.FC<ConfigurationProviderProps> = (props) => {
   const history = props.customHistory || defaultHistory;
-  const [parsedConfiguration, setParsedConfiguration] = React.useState(parseConfig(history.location.search));
+  const [parsedConfig, setParsedConfiguration] = React.useState(parseConfig(history.location.search));
 
   React.useEffect(() => {
     return history.listen((update) => {
-      setParsedConfiguration(parseConfig(update.location.search));
-    });
-  }, [history]);
+      const newParsedConfig = parseConfig(update.location.search);
 
-  const setConfiguration = React.useCallback(
-    (newConfig: Partial<Configuration>) => {
-      const updatedConfiguration = { ...parsedConfiguration.configuration, ...newConfig };
-      setParsedConfiguration({ configuration: updatedConfiguration });
-      history.push(`/?${queryString.stringify(updatedConfiguration)}`);
+      if (!isEqual(parsedConfig, newParsedConfig)) {
+        setParsedConfiguration(newParsedConfig);
+      }
+    });
+  }, [history, parsedConfig]);
+
+  const setConfiguration = React.useCallback<ConfigurationContextType["setConfiguration"]>(
+    (newConfig) => {
+      const updatedConfiguration = { ...parsedConfig.configuration, ...newConfig };
+      const newParsedConfig = configSchema.safeParse(updatedConfiguration);
+
+      if (newParsedConfig.success) {
+        if (!isEqual(parsedConfig.configuration, newParsedConfig.data)) {
+          setParsedConfiguration({ configuration: newParsedConfig.data });
+          history.push(`/?${queryString.stringify(updatedConfiguration)}`);
+        }
+      } else {
+        // TODO set errors
+        // eslint-disable-next-line no-console
+        console.error(newParsedConfig.error);
+      }
     },
-    [parsedConfiguration.configuration, history],
+    [parsedConfig.configuration, history],
   );
 
-  return <ConfigurationContext.Provider {...props} value={{ ...parsedConfiguration, setConfiguration }} />;
+  return <ConfigurationContext.Provider {...props} value={{ ...parsedConfig, setConfiguration }} />;
 };
 
 export const useConfiguration = (): ConfigurationContextType => {
