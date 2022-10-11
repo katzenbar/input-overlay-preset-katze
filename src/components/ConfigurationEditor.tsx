@@ -22,7 +22,7 @@ const ConfigurationEditorImpl: React.FC<Props> = (props) => {
 
     "Copy OBS URL": button(() =>
       navigator.clipboard.writeText(
-        `${window.location.origin}/?${queryString.stringify({
+        `${window.location.origin}${window.location.pathname}?${queryString.stringify({
           ...configurationContext.configuration,
           configuration_ui: false,
           event_source: "web_socket",

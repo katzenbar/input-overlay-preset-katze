@@ -65,7 +65,7 @@ export const ConfigurationProvider: React.FC<ConfigurationProviderProps> = (prop
       if (newParsedConfig.success) {
         if (!isEqual(parsedConfig.configuration, newParsedConfig.data)) {
           setParsedConfiguration({ configuration: newParsedConfig.data });
-          history.push(`/?${queryString.stringify(updatedConfiguration)}`);
+          history.push(`${history.location.pathname}?${queryString.stringify(updatedConfiguration)}`);
         }
       } else {
         // TODO set errors

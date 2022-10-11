@@ -1,4 +1,4 @@
-name: Deploy static content to Pages
+name: Build site and deploy to GitHub Pages
 
 on:
   # Runs on pushes targeting the default branch
@@ -38,9 +38,7 @@ jobs:
           cache: "pnpm"
       - name: Install dependencies
         run: pnpm install
-      - name: Run lint
-        run: pnpm lint
-      - name: Run tests
+      - name: Build site
         run: pnpm build
       - name: Setup Pages
         uses: actions/configure-pages@v2
