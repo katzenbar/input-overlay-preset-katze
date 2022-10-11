@@ -45,12 +45,42 @@ const mouseDraggedSchema = baseMouseEventSchema.merge(
   }),
 );
 
+const baseKeyEventSchema = baseEventSchema.merge(
+  z.object({
+    keycode: z.number(),
+    mask: z.number(),
+    rawcode: z.number(),
+  }),
+);
+
+const keyPressedSchema = baseKeyEventSchema.merge(
+  z.object({
+    event_type: z.literal("key_pressed"),
+  }),
+);
+
+const keyReleasedSchema = baseKeyEventSchema.merge(
+  z.object({
+    event_type: z.literal("key_released"),
+  }),
+);
+
+const keyTypedSchema = baseKeyEventSchema.merge(
+  z.object({
+    event_type: z.literal("key_typed"),
+    char: z.string(),
+  }),
+);
+
 export const inputEventSchema = z.discriminatedUnion("event_type", [
   mousePressedSchema,
   mouseReleasedSchema,
   mouseMovedSchema,
   mouseClickedSchema,
   mouseDraggedSchema,
+  keyPressedSchema,
+  keyReleasedSchema,
+  keyTypedSchema,
 ]);
 
 export type MouseEvent = z.infer<typeof baseMouseEventSchema>;

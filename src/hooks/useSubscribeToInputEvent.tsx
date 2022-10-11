@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from "react";
 import { simpleEventEmitter } from "../util/simpleEventEmitter";
 import { InputEvents } from "./inputEvents/inputEventSchema";
-import { setupDocumentInputEvents } from "./inputEvents/setupDocumentInputEvents";
+import { setupDomInputEvents } from "./inputEvents/setupDomInputEvents";
 import { setupWebSocketInputEvents } from "./inputEvents/setupWebSocketInputEvents";
 import { useConfiguration } from "./useConfiguration";
 
@@ -23,7 +23,7 @@ export const InputEventEmitterProvider: React.FC<PropsWithChildren> = (props) =>
     let inputEventSource: (emitter: EmitInputEventFn) => () => void;
 
     if (configuration.event_source === "browser") {
-      inputEventSource = setupDocumentInputEvents;
+      inputEventSource = setupDomInputEvents;
     } else {
       inputEventSource = setupWebSocketInputEvents;
     }
