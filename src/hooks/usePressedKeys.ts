@@ -12,6 +12,9 @@ type PressedKeysState = {
   keyCurrentlyPressed: boolean;
 };
 
+const isKeyCurrentlyPressed = (pressedKeyTimers: PressedKeysState["pressedKeyTimers"]): boolean =>
+  Object.values(pressedKeyTimers).some((timer) => timer !== undefined && timer?.timeoutId === undefined);
+
 const defaultState: Readonly<PressedKeysState> = {
   pressedKeys: new Set(),
   pressedKeyTimers: {},
@@ -58,7 +61,7 @@ const reducer: React.Reducer<PressedKeysState, Action> = (prevState, action) => 
           timeoutId: action.timeoutId,
         },
       };
-      const keyCurrentlyPressed = Object.values(pressedKeyTimers).some((timer) => timer?.timeoutId === undefined);
+      const keyCurrentlyPressed = isKeyCurrentlyPressed(pressedKeyTimers);
 
       return {
         pressedKeys: prevState.pressedKeys,
@@ -69,9 +72,7 @@ const reducer: React.Reducer<PressedKeysState, Action> = (prevState, action) => 
 
     case "keyUpAndRemove": {
       const pressedKeyTimers = { ...prevState.pressedKeyTimers, [action.keycode]: undefined };
-      const keyCurrentlyPressed = Object.values(pressedKeyTimers).some(
-        (timer) => timer !== undefined && timer?.timeoutId === undefined,
-      );
+      const keyCurrentlyPressed = isKeyCurrentlyPressed(pressedKeyTimers);
       const numTimers = Object.values(pressedKeyTimers).filter((timer) => timer?.timeoutId !== undefined).length;
 
       let pressedKeys = new Set(prevState.pressedKeys);

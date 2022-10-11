@@ -169,6 +169,16 @@ describe.concurrent("usePressedKeys", () => {
       pressedKeys: new Set(["VC_B"]),
       keyCurrentlyPressed: true,
     });
+
+    act(() => {
+      vi.setSystemTime(200);
+      keyReleasedMock({ keycode: 0x0030 });
+    });
+
+    expect(result.current).toEqual({
+      pressedKeys: new Set(["VC_B"]),
+      keyCurrentlyPressed: false,
+    });
   });
 
   it("releases keys pressed as a chord at the same time as the last key", () => {
