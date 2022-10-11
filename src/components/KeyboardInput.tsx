@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWindows } from "@fortawesome/free-brands-svg-icons";
 
 import { usePressedKeys } from "../hooks/usePressedKeys";
+import { motion, useAnimationControls } from "framer-motion";
 
 const SYMBOL_KEY_LABELS: Record<string, ReactNode | undefined> = {
   VC_MINUS: "-",
@@ -53,24 +54,39 @@ const sortKeys = (pressedKeys: Set<string>): Array<string> => {
 };
 
 export const KeyboardInput: React.FC = () => {
-  const { pressedKeys } = usePressedKeys();
+  const { pressedKeys, keyCurrentlyPressed } = usePressedKeys();
+  const controls = useAnimationControls();
+
+  React.useEffect(() => {
+    if (pressedKeys.size > 0) {
+      if (keyCurrentlyPressed) {
+        controls.start({ scale: 0.8, backgroundColor: "#1e293b" });
+      } else {
+        controls.start({ scale: 1, backgroundColor: "#334155" });
+      }
+    } else {
+      controls.start({ scale: 0 });
+    }
+  }, [pressedKeys, keyCurrentlyPressed, controls]);
 
   const keyCodes = sortKeys(pressedKeys);
 
   return (
-    <div className="fixed top-0 bottom-16 left-0 right-0 flex justify-center items-end">
-      {pressedKeys.size > 0 && (
-        <span className="py-3 px-6 rounded-3xl bg-slate-800 text-white">
-          <span className="text-3xl font-semibold">
-            {keyCodes.map((keyCode, index) => (
-              <React.Fragment key={keyCode}>
-                {keyCodeToComponent(keyCode)}
-                {index !== pressedKeys.size - 1 && " + "}
-              </React.Fragment>
-            ))}
-          </span>
+    <motion.div className="fixed bottom-16 left-0 right-0 flex justify-center items-end">
+      <motion.span
+        className="py-3 px-6 rounded-3xl text-white"
+        animate={controls}
+        transition={{ type: "spring", duration: 0.5, bounce: 0.3 }}
+      >
+        <span className="text-3xl font-semibold">
+          {keyCodes.map((keyCode, index) => (
+            <React.Fragment key={keyCode}>
+              {keyCodeToComponent(keyCode)}
+              {index !== pressedKeys.size - 1 && " + "}
+            </React.Fragment>
+          ))}
         </span>
-      )}
-    </div>
+      </motion.span>
+    </motion.div>
   );
 };
