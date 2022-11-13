@@ -4,11 +4,6 @@ import { useMouseDownState } from "../hooks/useMouseDownState";
 import { useMousePosition } from "../hooks/useMousePosition";
 import { useConfiguration } from "../hooks/useConfiguration";
 
-const mouseHighlightRadius = 15;
-const indicatorRatio = 0.4;
-
-const transition = { type: "spring", duration: 0.15, bounce: 0.3 };
-
 export const MouseClickHighlight: React.FC = () => {
   const { configuration } = useConfiguration();
   const mouseDownState = useMouseDownState();
@@ -16,8 +11,37 @@ export const MouseClickHighlight: React.FC = () => {
 
   const anyMouseButtonDown = mouseDownState[1] || mouseDownState[2] || mouseDownState[3];
 
+  const transition = {
+    type: "spring",
+    duration: configuration.mouse_click_animation_duration,
+    bounce: configuration.mouse_click_animation_bounce,
+  };
+
+  const mouseHighlightRadius = configuration.mouse_click_highlight_radius;
   const highlightColor = configuration.mouse_click_highlight_color;
-  const indicatorRadius = indicatorRatio * mouseHighlightRadius;
+  const highlightWidth = configuration.mouse_click_highlight_width;
+
+  const outlineColor = configuration.mouse_click_highlight_outline;
+  const outlineWidth = configuration.mouse_click_highlight_outline_width;
+
+  const indicatorRatio = configuration.mouse_click_indicator_size_ratio;
+  const middleIndicatorRatio = configuration.mouse_click_indicator_mmb_size_ratio;
+  const buttonIndicatorRadius = indicatorRatio * mouseHighlightRadius;
+  const indicatorSpacing = configuration.mouse_click_indicator_spacing;
+
+  const buttonIndicatorOuterRadius = buttonIndicatorRadius + outlineWidth;
+  const mouseHighlightOuterRadius = mouseHighlightRadius + highlightWidth / 2 + outlineWidth;
+
+  const indicatorCircle = (
+    <motion.circle
+      cx={buttonIndicatorOuterRadius}
+      cy={buttonIndicatorOuterRadius}
+      r={buttonIndicatorRadius}
+      fill={highlightColor}
+      stroke={outlineColor}
+      strokeWidth={outlineWidth}
+    />
+  );
 
   return (
     <motion.div
@@ -31,93 +55,123 @@ export const MouseClickHighlight: React.FC = () => {
       <MotionConfig transition={transition}>
         <AnimatePresence>
           {mouseDownState[1] && (
-            <motion.div
+            <motion.svg
+              viewBox={`0 0 ${2 * buttonIndicatorOuterRadius} ${2 * buttonIndicatorOuterRadius}`}
               key="lmb-highlight"
-              className="rounded-full"
               style={{
-                backgroundColor: highlightColor,
                 position: "absolute",
-                height: 2 * indicatorRadius,
-                width: 2 * indicatorRadius,
-                top: -indicatorRadius,
-                right: mouseHighlightRadius + 1.4 * indicatorRadius,
+                height: 2 * buttonIndicatorOuterRadius,
+                width: 2 * buttonIndicatorOuterRadius,
+                top: -buttonIndicatorOuterRadius,
+                right: mouseHighlightRadius + indicatorSpacing * buttonIndicatorOuterRadius,
               }}
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0 }}
-            />
+            >
+              {indicatorCircle}
+            </motion.svg>
           )}
 
           {mouseDownState[2] && (
             <>
-              <motion.div
+              <motion.svg
+                viewBox={`0 0 ${2 * buttonIndicatorOuterRadius} ${2 * buttonIndicatorOuterRadius}`}
                 key="rmb-highlight-1"
-                className="rounded-full"
                 style={{
-                  backgroundColor: highlightColor,
-
                   position: "absolute",
-                  height: 2 * indicatorRadius,
-                  width: 2 * indicatorRadius,
-                  top: -2.4 * indicatorRadius,
-                  left: mouseHighlightRadius + 1.4 * indicatorRadius,
+                  height: 2 * buttonIndicatorOuterRadius,
+                  width: 2 * buttonIndicatorOuterRadius,
+                  bottom: indicatorSpacing / 2,
+                  left: mouseHighlightRadius + indicatorSpacing * buttonIndicatorOuterRadius,
                 }}
                 initial={{ opacity: 0, scale: 0 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0 }}
-              />
-              <motion.div
+              >
+                {indicatorCircle}
+              </motion.svg>
+              <motion.svg
+                viewBox={`0 0 ${2 * buttonIndicatorOuterRadius} ${2 * buttonIndicatorOuterRadius}`}
                 key="rmb-highlight-2"
-                className="rounded-full"
                 style={{
-                  backgroundColor: highlightColor,
                   position: "absolute",
-                  height: 2 * indicatorRadius,
-                  width: 2 * indicatorRadius,
-                  top: 0.4 * indicatorRadius,
-                  left: mouseHighlightRadius + 1.4 * indicatorRadius,
+                  height: 2 * buttonIndicatorOuterRadius,
+                  width: 2 * buttonIndicatorOuterRadius,
+                  top: indicatorSpacing / 2,
+                  left: mouseHighlightRadius + indicatorSpacing * buttonIndicatorOuterRadius,
                 }}
                 initial={{ opacity: 0, scale: 0 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0 }}
-              />
+              >
+                {indicatorCircle}
+              </motion.svg>
             </>
           )}
 
           {mouseDownState[3] && (
-            <motion.div
+            <motion.svg
+              viewBox={`0 0 ${2 * buttonIndicatorOuterRadius} ${
+                middleIndicatorRatio * buttonIndicatorRadius + 2 * outlineWidth
+              }`}
               key="mmb-highlight"
-              className="rounded-full"
               style={{
-                backgroundColor: highlightColor,
                 position: "absolute",
-                height: 3 * indicatorRadius,
-                width: 2 * indicatorRadius,
-                bottom: mouseHighlightRadius + 1.4 * indicatorRadius,
-                right: -indicatorRadius,
+                width: 2 * buttonIndicatorOuterRadius,
+                height: 3 * buttonIndicatorOuterRadius,
+                bottom: mouseHighlightRadius + indicatorSpacing * buttonIndicatorOuterRadius,
+                right: -buttonIndicatorOuterRadius,
               }}
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0 }}
-            />
+            >
+              <motion.rect
+                x={outlineWidth}
+                y={outlineWidth}
+                rx={buttonIndicatorRadius}
+                width={2 * buttonIndicatorRadius}
+                height={middleIndicatorRatio * buttonIndicatorRadius}
+                fill={highlightColor}
+                stroke={outlineColor}
+                strokeWidth={outlineWidth}
+              />
+            </motion.svg>
           )}
 
           {anyMouseButtonDown && (
-            <motion.div
+            <motion.svg
+              viewBox={`0 0 ${mouseHighlightOuterRadius * 2} ${mouseHighlightOuterRadius * 2}`}
               key="mouse-highlight"
-              className="rounded-full	border-4"
               style={{
-                borderColor: highlightColor,
                 position: "absolute",
-                top: -mouseHighlightRadius,
-                left: -mouseHighlightRadius,
-                height: 2 * mouseHighlightRadius,
-                width: 2 * mouseHighlightRadius,
+                top: -mouseHighlightOuterRadius,
+                left: -mouseHighlightOuterRadius,
+                height: 2 * mouseHighlightOuterRadius,
+                width: 2 * mouseHighlightOuterRadius,
               }}
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0 }}
-            />
+            >
+              <motion.circle
+                cx={mouseHighlightOuterRadius}
+                cy={mouseHighlightOuterRadius}
+                r={mouseHighlightRadius}
+                fill="none"
+                stroke={outlineColor}
+                strokeWidth={highlightWidth + 2 * outlineWidth}
+              />
+              <motion.circle
+                cx={mouseHighlightOuterRadius}
+                cy={mouseHighlightOuterRadius}
+                r={mouseHighlightRadius}
+                fill="none"
+                stroke={highlightColor}
+                strokeWidth={highlightWidth}
+              />
+            </motion.svg>
           )}
         </AnimatePresence>
       </MotionConfig>
