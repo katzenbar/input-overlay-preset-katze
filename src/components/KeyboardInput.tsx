@@ -4,7 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWindows } from "@fortawesome/free-brands-svg-icons";
 
 import { usePressedKeys } from "../hooks/usePressedKeys";
-import { motion, useAnimationControls } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useConfiguration } from "../hooks/useConfiguration";
 
 const SYMBOL_KEY_LABELS: Record<string, ReactNode | undefined> = {
   VC_MINUS: "-",
@@ -54,39 +55,48 @@ const sortKeys = (pressedKeys: Set<string>): Array<string> => {
 };
 
 export const KeyboardInput: React.FC = () => {
+  const { configuration } = useConfiguration();
   const { pressedKeys, keyCurrentlyPressed } = usePressedKeys();
-  const controls = useAnimationControls();
 
-  React.useEffect(() => {
-    if (pressedKeys.size > 0) {
-      if (keyCurrentlyPressed) {
-        controls.start({ scale: 0.8, backgroundColor: "#1e293b" });
-      } else {
-        controls.start({ scale: 1, backgroundColor: "#334155" });
-      }
-    } else {
-      controls.start({ scale: 0 });
-    }
-  }, [pressedKeys, keyCurrentlyPressed, controls]);
+  const animate =
+    pressedKeys.size > 0
+      ? keyCurrentlyPressed
+        ? { scale: configuration.key_input_down_scale, backgroundColor: configuration.key_input_down_bg }
+        : { scale: 1, backgroundColor: configuration.key_input_bg }
+      : { scale: 0 };
 
   const keyCodes = sortKeys(pressedKeys);
 
-  return (
+  return configuration.key_input_show ? (
     <motion.div className="fixed bottom-16 left-0 right-0 flex justify-center items-end">
-      <motion.span
-        className="py-3 px-6 rounded-3xl text-white"
-        animate={controls}
-        transition={{ type: "spring", duration: 0.5, bounce: 0.3 }}
-      >
-        <span className="text-3xl font-semibold">
-          {keyCodes.map((keyCode, index) => (
-            <React.Fragment key={keyCode}>
-              {keyCodeToComponent(keyCode)}
-              {index !== pressedKeys.size - 1 && " + "}
-            </React.Fragment>
-          ))}
-        </span>
-      </motion.span>
+      <AnimatePresence>
+        {pressedKeys.size > 0 && (
+          <motion.span
+            className="py-3 px-6 rounded-3xl"
+            custom={keyCurrentlyPressed}
+            animate={animate}
+            transition={{
+              type: "spring",
+              duration: configuration.key_input_animation_duration,
+              bounce: configuration.key_input_animation_bounce,
+            }}
+            style={{
+              color: configuration.key_input_color,
+              borderColor: configuration.key_input_outline,
+              borderWidth: configuration.key_input_outline_width,
+            }}
+          >
+            <motion.span className="text-3xl font-semibold">
+              {keyCodes.map((keyCode, index) => (
+                <React.Fragment key={keyCode}>
+                  {keyCodeToComponent(keyCode)}
+                  {index !== pressedKeys.size - 1 && " + "}
+                </React.Fragment>
+              ))}
+            </motion.span>
+          </motion.span>
+        )}
+      </AnimatePresence>
     </motion.div>
-  );
+  ) : null;
 };

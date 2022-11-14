@@ -10,6 +10,17 @@ const configSchema = z.object({
   configuration_ui: z.boolean().default(true),
   event_source: z.enum(["web_socket", "browser"]).default("browser"),
 
+  key_input_show: z.boolean().default(true),
+  key_input_color: z.string().default("#FFFFFF"),
+  key_input_bg: z.string().default("#334155"),
+  key_input_down_bg: z.string().default("#1E293B"),
+  key_input_down_scale: z.number().default(0.75),
+  key_input_outline: z.string().default("#94A3B8"),
+  key_input_outline_width: z.number().default(2),
+
+  key_input_animation_duration: z.number().default(0.5),
+  key_input_animation_bounce: z.number().default(0.5),
+
   mouse_highlight_radius: z.number().default(10),
   mouse_click_show: z.boolean().default(true),
 

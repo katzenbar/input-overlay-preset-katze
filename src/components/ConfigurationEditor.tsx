@@ -19,6 +19,45 @@ const ConfigurationEditorImpl: React.FC<Props> = (props) => {
       { collapsed: true },
     ),
 
+    "Key Input": folder({
+      key_input_show: {
+        label: "Show Key Input",
+        value: configuration.key_input_show,
+      },
+      key_input_color: {
+        label: "Font Color",
+        value: configuration.key_input_color,
+      },
+      key_input_bg: {
+        label: "BG Color",
+        value: configuration.key_input_bg,
+      },
+      key_input_down_bg: {
+        label: "Pressed BG Color",
+        value: configuration.key_input_down_bg,
+      },
+      key_input_down_scale: {
+        label: "Pressed Scale",
+        value: configuration.key_input_down_scale,
+      },
+      key_input_outline: {
+        label: "Outline",
+        value: configuration.key_input_outline,
+      },
+      key_input_outline_width: {
+        label: "Outline Width",
+        value: configuration.key_input_outline_width,
+      },
+      key_input_animation_duration: {
+        label: "Ani Duration",
+        value: configuration.key_input_animation_duration,
+      },
+      key_input_animation_bounce: {
+        label: "Ani Bounce",
+        value: configuration.key_input_animation_bounce,
+      },
+    }),
+
     "Mouse Highlight": folder({
       mouse_click_show: {
         label: "Show Click Highlight",
