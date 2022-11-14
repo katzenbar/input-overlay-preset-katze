@@ -26,6 +26,40 @@ Displays the configuration UI, allowing an easy way to set configurable settings
 
 Allows switching to use events from the browser to preview settings without having to open the page in OBS.
 
+### Key input
+
+#### Font color - `key_input_color`
+
+A hex color for the font of the key input indicator.
+
+#### Background color - `key_input_bg`
+
+A hex color for the background color of the key input indicator when the key has been released.
+
+#### Pressed background color - `key_input_down_bg`
+
+A hex color for the background color of the key input indicator when the key is actively pressed.
+
+#### Pressed scale - `key_input_down_scale`
+
+The scale of the key input indicator when the key is actively pressed.
+
+#### Outline - `key_input_outline`
+
+A hex color for the outline around the key input indicator, to make it stand out over colors that are similar to the background color.
+
+##### Outline width - `key_input_outline_width`
+
+The thickness of the outline around the key input indicator.
+
+#### Animation duration - `key_input_animation_duration`
+
+The duration of animating the key input indicators in and out of view.
+
+#### Animation bounce - `key_input_animation_bounce`
+
+The bounciness of animating the key input indicators. See [Framer Motion's documentation](https://www.framer.com/docs/transition/###bounce) for more details.
+
 ### Mouse highlight
 
 #### Show click highlight - `mouse_click_show`

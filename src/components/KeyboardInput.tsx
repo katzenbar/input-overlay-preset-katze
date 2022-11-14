@@ -5,6 +5,7 @@ import { faWindows } from "@fortawesome/free-brands-svg-icons";
 
 import { usePressedKeys } from "../hooks/usePressedKeys";
 import { motion, useAnimationControls } from "framer-motion";
+import { useConfiguration } from "../hooks/useConfiguration";
 
 const SYMBOL_KEY_LABELS: Record<string, ReactNode | undefined> = {
   VC_MINUS: "-",
@@ -54,29 +55,47 @@ const sortKeys = (pressedKeys: Set<string>): Array<string> => {
 };
 
 export const KeyboardInput: React.FC = () => {
-  const { pressedKeys, keyCurrentlyPressed } = usePressedKeys();
+  const { configuration } = useConfiguration();
   const controls = useAnimationControls();
+
+  const { pressedKeys, keyCurrentlyPressed } = usePressedKeys();
 
   React.useEffect(() => {
     if (pressedKeys.size > 0) {
       if (keyCurrentlyPressed) {
-        controls.start({ scale: 0.8, backgroundColor: "#1e293b" });
+        controls.start({ scale: configuration.key_input_down_scale, backgroundColor: configuration.key_input_down_bg });
       } else {
-        controls.start({ scale: 1, backgroundColor: "#334155" });
+        controls.start({ scale: 1, backgroundColor: configuration.key_input_bg });
       }
     } else {
       controls.start({ scale: 0 });
     }
-  }, [pressedKeys, keyCurrentlyPressed, controls]);
+  }, [
+    pressedKeys.size,
+    keyCurrentlyPressed,
+    controls,
+    configuration.key_input_down_scale,
+    configuration.key_input_down_bg,
+    configuration.key_input_bg,
+  ]);
 
   const keyCodes = sortKeys(pressedKeys);
 
   return (
     <motion.div className="fixed bottom-16 left-0 right-0 flex justify-center items-end">
       <motion.span
-        className="py-3 px-6 rounded-3xl text-white"
+        className="py-3 px-6 rounded-3xl"
         animate={controls}
-        transition={{ type: "spring", duration: 0.5, bounce: 0.3 }}
+        transition={{
+          type: "spring",
+          duration: configuration.key_input_animation_duration,
+          bounce: configuration.key_input_animation_bounce,
+        }}
+        style={{
+          color: configuration.key_input_color,
+          borderColor: configuration.key_input_outline,
+          borderWidth: configuration.key_input_outline_width,
+        }}
       >
         <span className="text-3xl font-semibold">
           {keyCodes.map((keyCode, index) => (
