@@ -20,11 +20,16 @@ const ConfigurationEditorImpl: React.FC<Props> = (props) => {
     ),
 
     "Mouse Highlight": folder({
+      mouse_click_show: {
+        label: "Show Click Highlight",
+        value: configuration.mouse_click_show,
+      },
       mouse_highlight_radius: {
         label: "Radius",
         value: configuration.mouse_highlight_radius,
       },
     }),
+
     "Mouse Click Highlight": folder({
       mouse_click_highlight_color: { label: "Color", value: configuration.mouse_click_highlight_color },
       mouse_click_highlight_width: {

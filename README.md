@@ -28,6 +28,13 @@ Allows switching to use events from the browser to preview settings without havi
 
 ### Mouse highlight
 
+#### Show click highlight - `mouse_click_show`
+
+- `true` - default
+- `false`
+
+Show/hide the mouse click indicator.
+
 #### Radius - `mouse_highlight_radius`
 
 The center radius of the circle shown around the mouse highlight.

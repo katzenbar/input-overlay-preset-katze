@@ -9,6 +9,10 @@ export const MouseClickHighlight: React.FC = () => {
   const mouseDownState = useMouseDownState();
   const mousePosition = useMousePosition();
 
+  if (!configuration.mouse_click_show) {
+    return null;
+  }
+
   const anyMouseButtonDown = mouseDownState[1] || mouseDownState[2] || mouseDownState[3];
 
   const transition = {

@@ -11,6 +11,7 @@ const configSchema = z.object({
   event_source: z.enum(["web_socket", "browser"]).default("browser"),
 
   mouse_highlight_radius: z.number().default(10),
+  mouse_click_show: z.boolean().default(true),
 
   mouse_click_highlight_color: z.string().default("#38BDF8"),
   mouse_click_highlight_width: z.number().default(3),
