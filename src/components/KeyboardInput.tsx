@@ -67,7 +67,7 @@ export const KeyboardInput: React.FC = () => {
 
   const keyCodes = sortKeys(pressedKeys);
 
-  return (
+  return configuration.key_input_show ? (
     <motion.div className="fixed bottom-16 left-0 right-0 flex justify-center items-end">
       <AnimatePresence>
         {pressedKeys.size > 0 && (
@@ -98,5 +98,5 @@ export const KeyboardInput: React.FC = () => {
         )}
       </AnimatePresence>
     </motion.div>
-  );
+  ) : null;
 };

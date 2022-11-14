@@ -28,6 +28,13 @@ Allows switching to use events from the browser to preview settings without havi
 
 ### Key input
 
+### Show key input - `key_input_show`
+
+- `true` - default
+- `false`
+
+Show/hide the key input indicator.
+
 #### Font color - `key_input_color`
 
 A hex color for the font of the key input indicator.

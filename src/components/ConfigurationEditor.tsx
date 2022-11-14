@@ -20,6 +20,10 @@ const ConfigurationEditorImpl: React.FC<Props> = (props) => {
     ),
 
     "Key Input": folder({
+      key_input_show: {
+        label: "Show Key Input",
+        value: configuration.key_input_show,
+      },
       key_input_color: {
         label: "Font Color",
         value: configuration.key_input_color,
