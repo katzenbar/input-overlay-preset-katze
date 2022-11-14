@@ -9,7 +9,22 @@ const defaultHistory = createBrowserHistory();
 const configSchema = z.object({
   configuration_ui: z.boolean().default(true),
   event_source: z.enum(["web_socket", "browser"]).default("browser"),
-  mouse_click_highlight_color: z.string().default("#EE0000"),
+
+  mouse_highlight_radius: z.number().default(10),
+  mouse_click_show: z.boolean().default(true),
+
+  mouse_click_highlight_color: z.string().default("#38BDF8"),
+  mouse_click_highlight_width: z.number().default(3),
+
+  mouse_click_highlight_outline: z.string().default("#075985"),
+  mouse_click_highlight_outline_width: z.number().default(1),
+
+  mouse_click_indicator_size_ratio: z.number().default(0.35),
+  mouse_click_indicator_mmb_size_ratio: z.number().default(2.5),
+  mouse_click_indicator_spacing: z.number().default(1.2),
+
+  mouse_click_animation_duration: z.number().default(0.2),
+  mouse_click_animation_bounce: z.number().default(0.5),
 });
 
 export type Configuration = z.infer<typeof configSchema>;
