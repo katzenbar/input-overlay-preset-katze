@@ -17,7 +17,7 @@ export const MouseClickHighlight: React.FC = () => {
     bounce: configuration.mouse_click_animation_bounce,
   };
 
-  const mouseHighlightRadius = configuration.mouse_click_highlight_radius;
+  const mouseHighlightRadius = configuration.mouse_highlight_radius;
   const highlightColor = configuration.mouse_click_highlight_color;
   const highlightWidth = configuration.mouse_click_highlight_width;
 
