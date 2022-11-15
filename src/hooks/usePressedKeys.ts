@@ -42,8 +42,11 @@ const reducer: React.Reducer<PressedKeysState, Action> = (prevState, action) => 
       Object.entries(prevState.pressedKeyTimers).forEach(([keycode, value]) => {
         if (value?.timeoutId !== undefined) {
           window.clearTimeout(value.timeoutId);
-          pressedKeys.delete(keycode);
-          pressedKeyTimers[keycode] = undefined;
+
+          if (action.keycode !== keycode) {
+            pressedKeys.delete(keycode);
+            pressedKeyTimers[keycode] = undefined;
+          }
         }
       });
 
@@ -106,7 +109,7 @@ export const usePressedKeys = (options: PressedKeyOptions = {}) => {
       subscribeToInputEvent("key_pressed", (data) => {
         const keycode = scanCodeToKeyCode(data.keycode);
         const pressedKeyTimer = state.pressedKeyTimers[keycode];
-        if (!pressedKeyTimer) {
+        if (!pressedKeyTimer || pressedKeyTimer.timeoutId) {
           dispatch({ type: "keyDown", keycode: scanCodeToKeyCode(data.keycode) });
         }
       }),
