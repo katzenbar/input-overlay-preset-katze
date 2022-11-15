@@ -3,7 +3,8 @@ import { scanCodeToKeyCode } from "../util/keyCodeMappings";
 import { useSubscribeToInputEvent } from "./useSubscribeToInputEvent";
 
 type PressedKeyOptions = {
-  minHoldTime?: number;
+  minDisplayTime?: number;
+  minUpDisplayTime?: number;
 };
 
 type PressedKeysState = {
@@ -95,7 +96,7 @@ const reducer: React.Reducer<PressedKeysState, Action> = (prevState, action) => 
 };
 
 export const usePressedKeys = (options: PressedKeyOptions = {}) => {
-  const { minHoldTime = 1000 } = options;
+  const { minDisplayTime = 1000, minUpDisplayTime = 400 } = options;
 
   const [state, dispatch] = React.useReducer<React.Reducer<PressedKeysState, Action>>(reducer, defaultState);
   const subscribeToInputEvent = useSubscribeToInputEvent();
@@ -103,9 +104,13 @@ export const usePressedKeys = (options: PressedKeyOptions = {}) => {
   React.useEffect(
     () =>
       subscribeToInputEvent("key_pressed", (data) => {
-        dispatch({ type: "keyDown", keycode: scanCodeToKeyCode(data.keycode) });
+        const keycode = scanCodeToKeyCode(data.keycode);
+        const pressedKeyTimer = state.pressedKeyTimers[keycode];
+        if (!pressedKeyTimer) {
+          dispatch({ type: "keyDown", keycode: scanCodeToKeyCode(data.keycode) });
+        }
       }),
-    [subscribeToInputEvent],
+    [subscribeToInputEvent, state.pressedKeyTimers],
   );
 
   React.useEffect(
@@ -115,17 +120,18 @@ export const usePressedKeys = (options: PressedKeyOptions = {}) => {
         const pressedKeyTimer = state.pressedKeyTimers[keycode];
         const durationPressed = Date.now() - (pressedKeyTimer?.timePressed || 0);
 
-        if (durationPressed > minHoldTime) {
+        if (minUpDisplayTime === 0 && durationPressed > minDisplayTime) {
           dispatch({ type: "keyUpAndRemove", keycode });
         } else {
+          const timeToShowUp = Math.max(minUpDisplayTime, minDisplayTime - durationPressed);
           const timeoutId = window.setTimeout(() => {
             dispatch({ type: "keyUpAndRemove", keycode });
-          }, minHoldTime - durationPressed);
+          }, timeToShowUp);
 
           dispatch({ type: "keyUp", keycode, timeoutId });
         }
       }),
-    [subscribeToInputEvent, state.pressedKeyTimers, minHoldTime],
+    [subscribeToInputEvent, state.pressedKeyTimers, minDisplayTime, minUpDisplayTime],
   );
 
   return { pressedKeys: state.pressedKeys, keyCurrentlyPressed: state.keyCurrentlyPressed };

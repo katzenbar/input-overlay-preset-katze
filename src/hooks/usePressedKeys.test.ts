@@ -33,7 +33,7 @@ describe.concurrent("usePressedKeys", () => {
     const subscribeMock = vi.fn();
     useSubscribeToInputEventMock.mockReturnValue(subscribeMock);
 
-    const { result } = renderHook(() => usePressedKeys({ minHoldTime: 500 }));
+    const { result } = renderHook(() => usePressedKeys({ minDisplayTime: 500, minUpDisplayTime: 0 }));
 
     const keyPressedMock = subscribeMock.mock.calls.find((args) => args[0] === "key_pressed")?.at(1) as any;
     const keyReleasedMock = subscribeMock.mock.calls.find((args) => args[0] === "key_released")?.at(1) as any;
@@ -69,11 +69,111 @@ describe.concurrent("usePressedKeys", () => {
     });
   });
 
+  it("continues to show the up state for the specified time, if held longer than minDisplayTime", () => {
+    const subscribeMock = vi.fn();
+    useSubscribeToInputEventMock.mockReturnValue(subscribeMock);
+
+    const { result } = renderHook(() => usePressedKeys({ minDisplayTime: 250, minUpDisplayTime: 400 }));
+
+    const keyPressedMock = subscribeMock.mock.calls.find((args) => args[0] === "key_pressed")?.at(1) as any;
+    const keyReleasedMock = subscribeMock.mock.calls.find((args) => args[0] === "key_released")?.at(1) as any;
+    expect(keyPressedMock).toBeTruthy();
+
+    act(() => {
+      keyPressedMock({ keycode: 0x001e });
+    });
+
+    expect(result.current).toEqual({
+      pressedKeys: new Set(["VC_A"]),
+      keyCurrentlyPressed: true,
+    });
+
+    act(() => {
+      vi.setSystemTime(300);
+      keyReleasedMock({ keycode: 0x001e });
+    });
+
+    expect(result.current).toEqual({
+      pressedKeys: new Set(["VC_A"]),
+      keyCurrentlyPressed: false,
+    });
+
+    act(() => {
+      vi.setSystemTime(600);
+      vi.advanceTimersByTime(300);
+    });
+
+    expect(result.current).toEqual({
+      pressedKeys: new Set(["VC_A"]),
+      keyCurrentlyPressed: false,
+    });
+
+    act(() => {
+      vi.setSystemTime(701);
+      vi.advanceTimersByTime(101);
+    });
+
+    expect(result.current).toEqual({
+      pressedKeys: new Set(),
+      keyCurrentlyPressed: false,
+    });
+  });
+
+  it("shows up for the min display time, if the min up display time is less than the time remaining", () => {
+    const subscribeMock = vi.fn();
+    useSubscribeToInputEventMock.mockReturnValue(subscribeMock);
+
+    const { result } = renderHook(() => usePressedKeys({ minDisplayTime: 700, minUpDisplayTime: 200 }));
+
+    const keyPressedMock = subscribeMock.mock.calls.find((args) => args[0] === "key_pressed")?.at(1) as any;
+    const keyReleasedMock = subscribeMock.mock.calls.find((args) => args[0] === "key_released")?.at(1) as any;
+    expect(keyPressedMock).toBeTruthy();
+
+    act(() => {
+      keyPressedMock({ keycode: 0x001e });
+    });
+
+    expect(result.current).toEqual({
+      pressedKeys: new Set(["VC_A"]),
+      keyCurrentlyPressed: true,
+    });
+
+    act(() => {
+      vi.setSystemTime(300);
+      keyReleasedMock({ keycode: 0x001e });
+    });
+
+    expect(result.current).toEqual({
+      pressedKeys: new Set(["VC_A"]),
+      keyCurrentlyPressed: false,
+    });
+
+    act(() => {
+      vi.setSystemTime(600);
+      vi.advanceTimersByTime(300);
+    });
+
+    expect(result.current).toEqual({
+      pressedKeys: new Set(["VC_A"]),
+      keyCurrentlyPressed: false,
+    });
+
+    act(() => {
+      vi.setSystemTime(701);
+      vi.advanceTimersByTime(101);
+    });
+
+    expect(result.current).toEqual({
+      pressedKeys: new Set(),
+      keyCurrentlyPressed: false,
+    });
+  });
+
   it("handles multiple keys being pressed and released", () => {
     const subscribeMock = vi.fn();
     useSubscribeToInputEventMock.mockReturnValue(subscribeMock);
 
-    const { result } = renderHook(() => usePressedKeys());
+    const { result } = renderHook(() => usePressedKeys({ minUpDisplayTime: 0 }));
 
     const keyPressedMock = subscribeMock.mock.calls.find((args) => args[0] === "key_pressed")?.at(1) as any;
     const keyReleasedMock = subscribeMock.mock.calls.find((args) => args[0] === "key_released")?.at(1) as any;
@@ -134,7 +234,7 @@ describe.concurrent("usePressedKeys", () => {
     const subscribeMock = vi.fn();
     useSubscribeToInputEventMock.mockReturnValue(subscribeMock);
 
-    const { result } = renderHook(() => usePressedKeys());
+    const { result } = renderHook(() => usePressedKeys({ minUpDisplayTime: 0 }));
 
     const keyPressedMock = subscribeMock.mock.calls.find((args) => args[0] === "key_pressed")?.at(1) as any;
     const keyReleasedMock = subscribeMock.mock.calls.find((args) => args[0] === "key_released")?.at(1) as any;
@@ -185,7 +285,7 @@ describe.concurrent("usePressedKeys", () => {
     const subscribeMock = vi.fn();
     useSubscribeToInputEventMock.mockReturnValue(subscribeMock);
 
-    const { result } = renderHook(() => usePressedKeys({ minHoldTime: 500 }));
+    const { result } = renderHook(() => usePressedKeys({ minDisplayTime: 500, minUpDisplayTime: 0 }));
 
     const keyPressedMock = subscribeMock.mock.calls.find((args) => args[0] === "key_pressed")?.at(1) as any;
     const keyReleasedMock = subscribeMock.mock.calls.find((args) => args[0] === "key_released")?.at(1) as any;
