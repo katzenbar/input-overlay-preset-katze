@@ -21,6 +21,9 @@ const configSchema = z.object({
   key_input_animation_duration: z.number().default(0.5),
   key_input_animation_bounce: z.number().default(0.5),
 
+  key_input_min_display_ms: z.number().default(1500),
+  key_input_min_up_display_ms: z.number().default(500),
+
   mouse_highlight_radius: z.number().default(10),
   mouse_click_show: z.boolean().default(true),
 

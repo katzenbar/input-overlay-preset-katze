@@ -58,7 +58,10 @@ const sortKeys = (pressedKeys: Set<string>): Array<string> => {
 
 export const KeyboardInput: React.FC = () => {
   const { configuration } = useConfiguration();
-  const { pressedKeys, keyCurrentlyPressed } = usePressedKeys();
+  const { pressedKeys, keyCurrentlyPressed } = usePressedKeys({
+    minDisplayTime: configuration.key_input_min_display_ms,
+    minUpDisplayTime: configuration.key_input_min_up_display_ms,
+  });
 
   const animate =
     pressedKeys.size > 0
