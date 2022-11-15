@@ -20,6 +20,8 @@ const SYMBOL_KEY_LABELS: Record<string, ReactNode | undefined> = {
   VC_SLASH: "/",
   VC_ESCAPE: "Esc",
   VC_TAB: "Tab",
+  VC_SPACE: "Space",
+  VC_ENTER: "Enter",
   VC_CONTROL_L: "Ctrl",
   VC_CONTROL_R: "Ctrl",
   VC_ALT_L: "Alt",
