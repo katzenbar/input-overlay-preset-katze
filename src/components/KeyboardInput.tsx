@@ -82,6 +82,7 @@ export const KeyboardInput: React.FC = () => {
               duration: configuration.key_input_animation_duration,
               bounce: configuration.key_input_animation_bounce,
             }}
+            exit={{ scale: 0 }}
             style={{
               color: configuration.key_input_color,
               borderColor: configuration.key_input_outline,
