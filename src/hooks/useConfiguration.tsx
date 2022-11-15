@@ -11,11 +11,11 @@ const configSchema = z.object({
   event_source: z.enum(["web_socket", "browser"]).default("browser"),
 
   key_input_show: z.boolean().default(true),
-  key_input_color: z.string().default("#FFFFFF"),
+  key_input_color: z.string().default("#ffffff"),
   key_input_bg: z.string().default("#334155"),
-  key_input_down_bg: z.string().default("#1E293B"),
+  key_input_down_bg: z.string().default("#1e293b"),
   key_input_down_scale: z.number().default(0.75),
-  key_input_outline: z.string().default("#94A3B8"),
+  key_input_outline: z.string().default("#94a3b8"),
   key_input_outline_width: z.number().default(2),
 
   key_input_animation_duration: z.number().default(0.5),
@@ -27,7 +27,7 @@ const configSchema = z.object({
   mouse_highlight_radius: z.number().default(10),
   mouse_click_show: z.boolean().default(true),
 
-  mouse_click_highlight_color: z.string().default("#38BDF8"),
+  mouse_click_highlight_color: z.string().default("#38bdf8"),
   mouse_click_highlight_width: z.number().default(3),
 
   mouse_click_highlight_outline: z.string().default("#075985"),
@@ -40,6 +40,8 @@ const configSchema = z.object({
   mouse_click_animation_duration: z.number().default(0.2),
   mouse_click_animation_bounce: z.number().default(0.5),
 });
+
+const defaultConfig = configSchema.parse({});
 
 export type Configuration = z.infer<typeof configSchema>;
 
@@ -94,7 +96,16 @@ export const ConfigurationProvider: React.FC<ConfigurationProviderProps> = (prop
       if (newParsedConfig.success) {
         if (!isEqual(parsedConfig.configuration, newParsedConfig.data)) {
           setParsedConfiguration({ configuration: newParsedConfig.data });
-          history.push(`${history.location.pathname}?${queryString.stringify(updatedConfiguration)}`);
+
+          const queryConfig: Record<string, any> = {};
+          let key: keyof Configuration;
+          for (key in newParsedConfig.data) {
+            if (newParsedConfig.data[key] !== defaultConfig[key]) {
+              queryConfig[key] = newParsedConfig.data[key];
+            }
+          }
+
+          history.push(`${history.location.pathname}?${queryString.stringify(queryConfig)}`);
         }
       } else {
         // TODO set errors
