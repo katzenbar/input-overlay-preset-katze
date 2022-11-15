@@ -67,6 +67,14 @@ The duration of animating the key input indicators in and out of view.
 
 The bounciness of animating the key input indicators. See [Framer Motion's documentation](https://www.framer.com/docs/transition/###bounce) for more details.
 
+#### Min display - `key_input_min_display_ms`
+
+The minimum amount of time to display a key press (both down and up states) in milliseconds.
+
+#### Min up display - `key_input_min_up_display_ms`
+
+The minimum amount of time to display a key press in the up state, if it was pressed for the min display time already. Set this to 0 to not show the key in an up state if held for the min display time.
+
 ### Mouse highlight
 
 #### Show click highlight - `mouse_click_show`

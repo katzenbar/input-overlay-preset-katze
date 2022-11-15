@@ -56,6 +56,14 @@ const ConfigurationEditorImpl: React.FC<Props> = (props) => {
         label: "Ani Bounce",
         value: configuration.key_input_animation_bounce,
       },
+      key_input_min_display_ms: {
+        label: "Min Display",
+        value: configuration.key_input_min_display_ms,
+      },
+      key_input_min_up_display_ms: {
+        label: "Min Up Display",
+        value: configuration.key_input_min_up_display_ms,
+      },
     }),
 
     "Mouse Highlight": folder({

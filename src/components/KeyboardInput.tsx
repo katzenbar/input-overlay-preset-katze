@@ -20,6 +20,8 @@ const SYMBOL_KEY_LABELS: Record<string, ReactNode | undefined> = {
   VC_SLASH: "/",
   VC_ESCAPE: "Esc",
   VC_TAB: "Tab",
+  VC_SPACE: "Space",
+  VC_ENTER: "Enter",
   VC_CONTROL_L: "Ctrl",
   VC_CONTROL_R: "Ctrl",
   VC_ALT_L: "Alt",
@@ -56,7 +58,10 @@ const sortKeys = (pressedKeys: Set<string>): Array<string> => {
 
 export const KeyboardInput: React.FC = () => {
   const { configuration } = useConfiguration();
-  const { pressedKeys, keyCurrentlyPressed } = usePressedKeys();
+  const { pressedKeys, keyCurrentlyPressed } = usePressedKeys({
+    minDisplayTime: configuration.key_input_min_display_ms,
+    minUpDisplayTime: configuration.key_input_min_up_display_ms,
+  });
 
   const animate =
     pressedKeys.size > 0
@@ -80,6 +85,7 @@ export const KeyboardInput: React.FC = () => {
               duration: configuration.key_input_animation_duration,
               bounce: configuration.key_input_animation_bounce,
             }}
+            exit={{ scale: 0 }}
             style={{
               color: configuration.key_input_color,
               borderColor: configuration.key_input_outline,
