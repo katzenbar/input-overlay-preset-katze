@@ -1,10 +1,25 @@
 # input-overlay preset - katze
 
-A browser-based preset for the [input-overlay (v5.0.0+)](https://github.com/univrsal/input-overlay) plugin for [OBS Studio (v28.0.0+)](https://obsproject.com/).
+A browser-based preset for the [input-overlay (v5.0.0+)](https://github.com/univrsal/input-overlay) plugin for [OBS Studio (v28.0.0+)](https://obsproject.com/). This plugin is currently only compatible with Windows.
 
 # Using the preset
 
+**NOTE:** There is currently an [issue with the WebSocket server](https://github.com/univrsal/input-overlay/issues/230) in the input-overlay plugin that occasionally causes OBS to crash. I do not recommend using this for anything you don't want to re-record in case of a crash.
+
 ## Configuring input overlay plugin
+
+- Install the [input-overlay](https://github.com/univrsal/input-overlay) plugin
+- Configure the WebSocket server using [these instructions](https://github.com/univrsal/input-overlay/wiki/Usage#websocket-server)
+
+  - Go to Tools > input-overlay settings to find the menu
+  - Use port 16899 for the WebSocket server
+
+- Go to the [preset preview](https://katzenbar.github.io/input-overlay-preset-katze/) and configure any options you want to change
+- Click "Copy OBS URL"
+- Add a Browser source to your OBS scene
+  - You may need to adjust the browser width/height to match the screen shown below for the mouse cursor to line up correctly
+- Paste the URL from the preset preview into the URL field
+- Save the settings
 
 ## Configuration options
 
@@ -27,6 +42,8 @@ Displays the configuration UI, allowing an easy way to set configurable settings
 Allows switching to use events from the browser to preview settings without having to open the page in OBS.
 
 ### Key input
+
+This is made for recording using applications with lots of keyboard shortcuts and modifier keys like Photoshop, not necessarily typing text.
 
 ### Show key input - `key_input_show`
 
@@ -127,8 +144,6 @@ The duration of animating the mouse click indicators in and out of view.
 #### Animation bounce - `mouse_click_animation_bounce`
 
 The bounciness of animating the mouse click indicators. See [Framer Motion's documentation](https://www.framer.com/docs/transition/###bounce) for more details.
-
-#### O
 
 # Development
 
