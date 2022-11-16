@@ -181,9 +181,12 @@ export const keyCodeMappings: ReadonlyArray<KeyCodeMapping> = [
 
 const domCodeToScanCodeMap = new Map<string, number>();
 const scanCodeToKeyCodeMap = new Map<number, string>();
+const keyCodeToDomCodeMap = new Map<string, string>();
+
 keyCodeMappings.forEach(({ scanCode, keyCode, domCode }) => {
   if (domCode) {
     domCodeToScanCodeMap.set(domCode, scanCode);
+    keyCodeToDomCodeMap.set(keyCode, domCode);
   }
 
   scanCodeToKeyCodeMap.set(scanCode, keyCode);
@@ -196,4 +199,8 @@ export const mapDomEventToScanCode = (ev: KeyboardEvent): number => {
 
 export const scanCodeToKeyCode = (scanCode: number): string => {
   return scanCodeToKeyCodeMap.get(scanCode) || "VC_UNKNOWN";
+};
+
+export const keyCodeToDomCode = (keyCode: string): string => {
+  return keyCodeToDomCodeMap.get(keyCode) || "□";
 };

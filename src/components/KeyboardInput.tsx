@@ -6,6 +6,8 @@ import { faWindows } from "@fortawesome/free-brands-svg-icons";
 import { usePressedKeys } from "../hooks/usePressedKeys";
 import { AnimatePresence, motion } from "framer-motion";
 import { useConfiguration } from "../hooks/useConfiguration";
+import { faArrowDown, faArrowLeft, faArrowRight, faArrowUp, faDeleteLeft } from "@fortawesome/free-solid-svg-icons";
+import { keyCodeToDomCode } from "../util/keyCodeMappings";
 
 const SYMBOL_KEY_LABELS: Record<string, ReactNode | undefined> = {
   VC_MINUS: "-",
@@ -15,9 +17,13 @@ const SYMBOL_KEY_LABELS: Record<string, ReactNode | undefined> = {
   VC_BACK_SLASH: "\\",
   VC_SEMICOLON: ";",
   VC_QUOTE: "'",
+  VC_BACKQUOTE: "`",
   VC_COMMA: ",",
   VC_PERIOD: ".",
   VC_SLASH: "/",
+  VC_BACKSPACE: <FontAwesomeIcon icon={faDeleteLeft} />,
+  VC_HOME: "Home",
+  VC_END: "End",
   VC_ESCAPE: "Esc",
   VC_TAB: "Tab",
   VC_SPACE: "Space",
@@ -30,6 +36,10 @@ const SYMBOL_KEY_LABELS: Record<string, ReactNode | undefined> = {
   VC_META_R: <FontAwesomeIcon icon={faWindows} />,
   VC_SHIFT_L: "Shift",
   VC_SHIFT_R: "Shift",
+  VC_LEFT: <FontAwesomeIcon icon={faArrowLeft} />,
+  VC_RIGHT: <FontAwesomeIcon icon={faArrowRight} />,
+  VC_DOWN: <FontAwesomeIcon icon={faArrowDown} />,
+  VC_UP: <FontAwesomeIcon icon={faArrowUp} />,
 };
 
 const SORT_ORDER: Record<string, number | undefined> = {
@@ -46,10 +56,16 @@ const SORT_ORDER: Record<string, number | undefined> = {
 };
 
 const keyCodeToComponent = (keyCode: string) => {
-  if (/^VC_[A-Z0-9]$|^VC_F\d$/.test(keyCode)) {
+  if (/^VC_[A-Z0-9]$|^VC_F\d\d?$/.test(keyCode)) {
     return keyCode.replace("VC_", "");
   }
-  return SYMBOL_KEY_LABELS[keyCode];
+
+  const symbolLabel = SYMBOL_KEY_LABELS[keyCode];
+  if (symbolLabel) {
+    return symbolLabel;
+  }
+
+  return keyCodeToDomCode(keyCode);
 };
 
 const sortKeys = (pressedKeys: Set<string>): Array<string> => {
