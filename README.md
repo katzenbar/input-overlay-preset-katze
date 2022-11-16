@@ -2,6 +2,8 @@
 
 A browser-based preset for the [input-overlay (v5.0.0+)](https://github.com/univrsal/input-overlay) plugin for [OBS Studio (v28.0.0+)](https://obsproject.com/). This plugin is currently only compatible with Windows.
 
+![input-overlay-preset](https://user-images.githubusercontent.com/1699388/202068382-598418b6-97c5-4c1f-81b2-0c2348c85dd7.gif)
+
 # Using the preset
 
 **NOTE:** There is currently an [issue with the WebSocket server](https://github.com/univrsal/input-overlay/issues/230) in the input-overlay plugin that occasionally causes OBS to crash. I do not recommend using this for anything you don't want to re-record in case of a crash.
