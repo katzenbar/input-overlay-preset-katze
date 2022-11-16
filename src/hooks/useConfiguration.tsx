@@ -41,7 +41,7 @@ const configSchema = z.object({
   mouse_click_animation_bounce: z.number().default(0.5),
 });
 
-const defaultConfig = configSchema.parse({});
+export const defaultConfig = configSchema.parse({});
 
 export type Configuration = z.infer<typeof configSchema>;
 
@@ -96,15 +96,7 @@ export const ConfigurationProvider: React.FC<ConfigurationProviderProps> = (prop
       if (newParsedConfig.success) {
         if (!isEqual(parsedConfig.configuration, newParsedConfig.data)) {
           setParsedConfiguration({ configuration: newParsedConfig.data });
-
-          const queryConfig: Record<string, any> = {};
-          let key: keyof Configuration;
-          for (key in newParsedConfig.data) {
-            if (newParsedConfig.data[key] !== defaultConfig[key]) {
-              queryConfig[key] = newParsedConfig.data[key];
-            }
-          }
-
+          const queryConfig = getNonDefaultConfigurationSettings(newParsedConfig.data);
           history.push(`${history.location.pathname}?${queryString.stringify(queryConfig)}`);
         }
       } else {
@@ -121,4 +113,17 @@ export const ConfigurationProvider: React.FC<ConfigurationProviderProps> = (prop
 
 export const useConfiguration = (): ConfigurationContextType => {
   return React.useContext(ConfigurationContext);
+};
+
+export const getNonDefaultConfigurationSettings = (configuration: Configuration): Partial<Configuration> => {
+  const queryConfig: Partial<Configuration> = {};
+  let key: keyof Configuration;
+
+  for (key in configuration) {
+    if (configuration[key] !== defaultConfig[key]) {
+      queryConfig[key] = configuration[key] as any;
+    }
+  }
+
+  return queryConfig;
 };

@@ -1,7 +1,12 @@
 import queryString from "query-string";
 import { button, folder, useControls } from "leva";
 import React from "react";
-import { Configuration, ConfigurationContextType, useConfiguration } from "../hooks/useConfiguration";
+import {
+  Configuration,
+  ConfigurationContextType,
+  useConfiguration,
+  getNonDefaultConfigurationSettings,
+} from "../hooks/useConfiguration";
 
 type Props = {
   configurationContext: ConfigurationContextType;
@@ -115,11 +120,13 @@ const ConfigurationEditorImpl: React.FC<Props> = (props) => {
 
     "Copy OBS URL": button(() =>
       navigator.clipboard.writeText(
-        `${window.location.origin}${window.location.pathname}?${queryString.stringify({
-          ...configurationContext.configuration,
-          configuration_ui: false,
-          event_source: "web_socket",
-        })}`,
+        `${window.location.origin}${window.location.pathname}?${queryString.stringify(
+          getNonDefaultConfigurationSettings({
+            ...configurationContext.configuration,
+            configuration_ui: false,
+            event_source: "web_socket",
+          }),
+        )}`,
       ),
     ),
   });

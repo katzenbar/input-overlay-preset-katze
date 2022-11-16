@@ -1,7 +1,12 @@
 import { createMemoryHistory } from "history";
 import { describe, expect, it } from "vitest";
 import { renderHook, act } from "@testing-library/react";
-import { useConfiguration, ConfigurationProvider } from "./useConfiguration";
+import {
+  useConfiguration,
+  ConfigurationProvider,
+  getNonDefaultConfigurationSettings,
+  defaultConfig,
+} from "./useConfiguration";
 
 describe.concurrent("useConfiguration", () => {
   it("returns the default configuration when no options are set", () => {
@@ -83,6 +88,18 @@ describe.concurrent("useConfiguration", () => {
         configuration: expect.objectContaining({ event_source: "web_socket" }),
         setConfiguration: expect.any(Function),
       });
+    });
+  });
+});
+
+describe.concurrent("getNonDefaultConfigurationSettings", () => {
+  it("returns an empty object when given the default config", () => {
+    expect(getNonDefaultConfigurationSettings(defaultConfig)).toEqual({});
+  });
+
+  it("returns only the parts of the configuration that differ from the default values", () => {
+    expect(getNonDefaultConfigurationSettings({ ...defaultConfig, mouse_click_highlight_color: "#aa0000" })).toEqual({
+      mouse_click_highlight_color: "#aa0000",
     });
   });
 });
