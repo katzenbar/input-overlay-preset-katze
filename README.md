@@ -12,10 +12,8 @@ A browser-based preset for the [input-overlay (v5.0.0+)](https://github.com/univ
 
 - Install the [input-overlay](https://github.com/univrsal/input-overlay) plugin
 - Configure the WebSocket server using [these instructions](https://github.com/univrsal/input-overlay/wiki/Usage#websocket-server)
-
   - Go to Tools > input-overlay settings to find the menu
   - Use port 16899 for the WebSocket server
-
 - Go to the [preset preview](https://katzenbar.github.io/input-overlay-preset-katze/) and configure any options you want to change
 - Click "Copy OBS URL"
 - Add a Browser source to your OBS scene
