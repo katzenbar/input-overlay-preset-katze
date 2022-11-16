@@ -37,9 +37,13 @@ const SYMBOL_KEY_LABELS: Record<string, ReactNode | undefined> = {
   VC_SHIFT_L: "Shift",
   VC_SHIFT_R: "Shift",
   VC_LEFT: <FontAwesomeIcon icon={faArrowLeft} />,
+  VC_KP_LEFT: <FontAwesomeIcon icon={faArrowLeft} />,
   VC_RIGHT: <FontAwesomeIcon icon={faArrowRight} />,
+  VC_KP_RIGHT: <FontAwesomeIcon icon={faArrowRight} />,
   VC_DOWN: <FontAwesomeIcon icon={faArrowDown} />,
+  VC_KP_DOWN: <FontAwesomeIcon icon={faArrowDown} />,
   VC_UP: <FontAwesomeIcon icon={faArrowUp} />,
+  VC_KP_UP: <FontAwesomeIcon icon={faArrowUp} />,
 };
 
 const SORT_ORDER: Record<string, number | undefined> = {
