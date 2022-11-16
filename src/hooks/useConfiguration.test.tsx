@@ -15,7 +15,7 @@ describe.concurrent("useConfiguration", () => {
       configuration: expect.objectContaining({
         configuration_ui: true,
         event_source: "browser",
-        mouse_click_highlight_color: "#38bdf8",
+        mouse_click_highlight_color: "#fca5a5",
       }),
       setConfiguration: expect.any(Function),
     });

@@ -27,10 +27,10 @@ const configSchema = z.object({
   mouse_highlight_radius: z.number().default(10),
   mouse_click_show: z.boolean().default(true),
 
-  mouse_click_highlight_color: z.string().default("#38bdf8"),
+  mouse_click_highlight_color: z.string().default("#fca5a5"),
   mouse_click_highlight_width: z.number().default(3),
 
-  mouse_click_highlight_outline: z.string().default("#075985"),
+  mouse_click_highlight_outline: z.string().default("#802c2c"),
   mouse_click_highlight_outline_width: z.number().default(1),
 
   mouse_click_indicator_size_ratio: z.number().default(0.35),
