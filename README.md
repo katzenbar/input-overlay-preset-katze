@@ -6,8 +6,6 @@ A browser-based preset for the [input-overlay (v5.0.0+)](https://github.com/univ
 
 # Using the preset
 
-**NOTE:** There is currently an [issue with the WebSocket server](https://github.com/univrsal/input-overlay/issues/230) in the input-overlay plugin that occasionally causes OBS to crash. I do not recommend using this for anything you don't want to re-record in case of a crash.
-
 ## Configuring input overlay plugin
 
 - Install the [input-overlay](https://github.com/univrsal/input-overlay) plugin
